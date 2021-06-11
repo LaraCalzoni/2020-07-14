@@ -1,5 +1,8 @@
 package it.polito.tdp.PremierLeague.model;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,6 +56,57 @@ public class Model {
 	public Set <Team> getTeams(){
 		return this.grafo.vertexSet();
 	}
+	
+	/*
+	 le squadre battute da s, ovvero quelle arrivate in una posizione di classifica peggiore,
+	 ordinate per differenza punti con s.
+	 */
+	public List <SquadraPeggiore> getSquadreBattute(Team squadra){
+		List <SquadraPeggiore> result = new ArrayList<>();
+		for(Team t : this.getTeams()) {
+			if(t.getPunti()< squadra.getPunti()) {
+				SquadraPeggiore s = new SquadraPeggiore(t, squadra.getPunti()-t.getPunti());
+				result.add(s);
+			}
+		}
+		Collections.sort(result, new Comparator <SquadraPeggiore> () {
+
+			@Override
+			public int compare(SquadraPeggiore o1, SquadraPeggiore o2) {
+				
+				return o1.getDifferenza()-o2.getDifferenza();
+			}
+			
+		});
+		
+		return result;
+		
+		
+	}
+	
+	public List <SquadraPeggiore> getSquadreMigliori(Team squadra){
+		List <SquadraPeggiore> result = new ArrayList<>();
+		for(Team t : this.getTeams()) {
+			if(t.getPunti()> squadra.getPunti()) {
+				SquadraPeggiore s = new SquadraPeggiore(t, t.getPunti()-squadra.getPunti());
+				result.add(s);
+			}
+		}
+		Collections.sort(result, new Comparator <SquadraPeggiore> () {
+
+			@Override
+			public int compare(SquadraPeggiore o1, SquadraPeggiore o2) {
+				
+				return o1.getDifferenza()-o2.getDifferenza();
+			}
+			
+		});
+		
+		return result;
+		
+		
+	}
+	
 	
 	}
 	

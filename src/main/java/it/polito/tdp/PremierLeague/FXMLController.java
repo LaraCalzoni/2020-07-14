@@ -8,6 +8,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import it.polito.tdp.PremierLeague.model.Model;
+import it.polito.tdp.PremierLeague.model.SquadraPeggiore;
 import it.polito.tdp.PremierLeague.model.Team;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -49,14 +50,33 @@ public class FXMLController {
 
     @FXML
     void doClassifica(ActionEvent event) {
-
+    	
+    	txtResult.clear();
+    	Team squadra = this.cmbSquadra.getValue();
+    	if(squadra == null) {
+    		txtResult.appendText("Selezionare una squadra!");
+    		return;
+    	}
+    	
+    	txtResult.appendText("SQUADRE PEGGIORI: "+"\n");
+    	for(SquadraPeggiore b : this.model.getSquadreBattute(squadra)) {
+    		
+    		txtResult.appendText(b.getSquadra()+" --> "+b.getDifferenza()+"\n");
+    	}
+    	
+    	txtResult.appendText("\n"+"SQUADRE MIGLIORI: "+"\n");
+    	for(SquadraPeggiore b : this.model.getSquadreMigliori(squadra)) {
+    		
+    		txtResult.appendText(b.getSquadra()+" --> "+b.getDifferenza()+"\n");
+    	}
+    	
     }
 
     @FXML
     void doCreaGrafo(ActionEvent event) {
     	txtResult.clear();
     	this.model.creaGrafo();
-    	txtResult.setText("Grafo creato con "+model.nVertici()+" vertici e "+model.nArchi()+" archi.");
+    	txtResult.setText("Grafo creato con "+model.nVertici()+" vertici e "+model.nArchi()+" archi."+"\n");
     	this.cmbSquadra.getItems().addAll(model.getTeams());
     	
     }
