@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 import org.jgrapht.Graphs;
@@ -106,6 +107,117 @@ public class Model {
 		
 		
 	}
+	
+	public void simula(int numero) {
+		
+				
+		for (Match m : this.dao.getPartiteOrdinate()) {
+			Team squadraCasa = idMap.get(m.getTeamHomeID());
+			Team squadraTrasferta = idMap.get(m.getTeamAwayID());
+			squadraCasa.setReporter(numero);
+			squadraTrasferta.setReporter(numero);
+			List<SquadraPeggiore> lista1 = this.getSquadreMigliori(squadraCasa);
+			List<SquadraPeggiore> lista2 = this.getSquadreBattute(squadraTrasferta);
+			List<SquadraPeggiore> lista3 = this.getSquadreMigliori(squadraTrasferta);
+			List<SquadraPeggiore> lista4 = this.getSquadreBattute(squadraCasa);
+			
+			if(m.getResultOfTeamHome()==1) { //vuol dire che ha vinto squadra in casa
+				
+				double x = Math.random();
+				Random random = new Random();
+				
+				if(x<=0.5) {
+					if(squadraCasa.getReporter()>0) {
+						
+						if(lista1.size()>0) {
+							squadraCasa.decreaseReporter();
+							SquadraPeggiore t =lista1.get(random.nextInt(lista1.size()));
+							t.getSquadra().increaseReporter();
+						}
+						
+					}
+				}
+				
+				
+				if(x<=0.2) {
+					
+					if(squadraTrasferta.getReporter()>0) {
+						int numReporter = squadraTrasferta.getReporter();
+						int numBocciati = (int) (Math.random()*(numReporter-0));
+						
+						if(lista2.size()>0) {
+							squadraTrasferta.setReporter(numReporter-numBocciati);
+							SquadraPeggiore t =lista2.get(random.nextInt(lista2.size()));
+							t.getSquadra().setReporter(t.getSquadra().getReporter()+numBocciati);
+							
+						}
+							
+						
+						
+					}
+				}
+				
+			}
+			
+		if(m.getResultOfTeamHome()==-1) { //vuol dire che ha vinto squadra in trasferta
+				
+				double x = Math.random();
+				Random random = new Random();
+				
+				if(x<=0.5) {
+					if(squadraTrasferta.getReporter()>0) {
+						
+						if(lista3.size()>0) {
+							squadraTrasferta.decreaseReporter();
+							SquadraPeggiore t =lista3.get(random.nextInt(lista3.size()));
+							t.getSquadra().increaseReporter();
+						}
+						
+					}
+				}
+				
+				
+				if(x<=0.2) {
+					
+					if(squadraCasa.getReporter()>0) {
+						int numReporter = squadraCasa.getReporter();
+						int numBocciati = (int) (Math.random()*(numReporter-0));
+						
+						if(lista4.size()>0) {
+							squadraCasa.setReporter(numReporter-numBocciati);
+							SquadraPeggiore t =lista4.get(random.nextInt(lista4.size()));
+							t.getSquadra().setReporter(t.getSquadra().getReporter()+numBocciati);
+							
+						}
+							
+						
+						
+					}
+				}
+				
+			}
+			
+			
+			
+		}
+		
+		
+		
+	}
+	
+	public List <Match> getMatches(){
+		return dao.listAllMatches();
+	}
+	
+	public Team getTeam(Integer id) {
+		for(Team t : this.getTeams()) {
+			if(t.getTeamID() == id) {
+				return t;
+			}
+		}
+		return null;
+	}
+	
 	
 	
 	}

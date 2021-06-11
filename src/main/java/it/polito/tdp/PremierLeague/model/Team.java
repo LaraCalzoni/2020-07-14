@@ -4,12 +4,14 @@ public class Team {
 	Integer teamID;
 	String name;
 	int punti;
+	int reporter;
 
 	public Team(Integer teamID, String name) {
 		super();
 		this.teamID = teamID;
 		this.name = name;
 		this.punti = 0;
+		reporter = 0;
 	}
 	
 	public Integer getTeamID() {
@@ -63,6 +65,21 @@ public class Team {
 
 	public void setPunti(Integer puntiDaAggiungere) {
 		this.punti = punti + puntiDaAggiungere;
+	}
+
+	public int getReporter() {
+		return reporter;
+	}
+
+	public void setReporter(int numero) {
+		this.reporter = reporter+numero;
+	}
+	
+	public void decreaseReporter() {
+		reporter--;
+	}
+	public void increaseReporter() {
+		reporter++;
 	}
 	
 	

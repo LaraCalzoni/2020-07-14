@@ -125,7 +125,35 @@ public class PremierLeagueDAO {
 		}
 	}
 	
-	
+	public List<Match> getPartiteOrdinate(){
+		String sql = "SELECT m.MatchID, m.TeamHomeID, m.TeamAwayID, m.teamHomeFormation, m.teamAwayFormation, m.resultOfTeamHome, m.date, t1.Name, t2.Name "
+				    +"FROM Matches m, Teams t1, Teams t2 "
+				    +"WHERE m.TeamHomeID = t1.TeamID AND m.TeamAwayID = t2.TeamID "
+				    +"ORDER BY m.Date";
+		List<Match> result = new ArrayList<Match>();
+		Connection conn = DBConnect.getConnection();
+
+		try {
+			PreparedStatement st = conn.prepareStatement(sql);
+			ResultSet res = st.executeQuery();
+			while (res.next()) {
+
+				
+				Match match = new Match(res.getInt("m.MatchID"), res.getInt("m.TeamHomeID"), res.getInt("m.TeamAwayID"), res.getInt("m.teamHomeFormation"), 
+							res.getInt("m.teamAwayFormation"),res.getInt("m.resultOfTeamHome"), res.getTimestamp("m.date").toLocalDateTime(), res.getString("t1.Name"),res.getString("t2.Name"));
+				
+				
+				result.add(match);
+
+			}
+			conn.close();
+			return result;
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 	public List <Adiacenza> getAdiacenze(Map <Integer, Team> idMap){
 		List <Adiacenza> elenco = new ArrayList<>();
 		Map <Integer, Match> mapMatches = new HashMap<>();
@@ -162,25 +190,7 @@ public class PremierLeagueDAO {
 		}
 		
 		
-		/*
-		for(Match m : this.listAllMatches()) {
-			
-		if(mapMatches.containsKey(m)) {
-			Team t1 = idMap.get(m.getTeamHomeID());
-			Team t2 = idMap.get(m.getTeamAwayID());
-			//if(t1.getPunti()-t2.getPunti()>0) { //vuol dire che arco da t1 a t2
-				Adiacenza a = new Adiacenza (t1, t2, Math.abs(t1.getPunti()-t2.getPunti()));
-				elenco.add(a);
-			//}
-			
-		}
-			
-		}
-		return elenco;
-		
-		*/
-	
-	}
+			}
 	
 	
 

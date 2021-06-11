@@ -7,6 +7,7 @@ package it.polito.tdp.PremierLeague;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import it.polito.tdp.PremierLeague.model.Match;
 import it.polito.tdp.PremierLeague.model.Model;
 import it.polito.tdp.PremierLeague.model.SquadraPeggiore;
 import it.polito.tdp.PremierLeague.model.Team;
@@ -19,7 +20,12 @@ import javafx.scene.control.TextField;
 
 public class FXMLController {
 	
+	double media;
 	private Model model;
+	
+	public FXMLController() {
+		media=0;
+	}
 
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
@@ -81,9 +87,49 @@ public class FXMLController {
     	
     }
 
+    /*
+     Al termine del campionato, stampare:
+		• quanti reporter hanno assistito, in media, ad ogni partita, indipendentemente dalle squadre a cui
+		erano assegnati;
+		• Il numero di partite per cui il numero totale di reporter (indipendentemente dalla squadra) era
+		critico, ovvero minore della soglia X.
+     */
+    
+    
     @FXML
     void doSimula(ActionEvent event) {
-
+    	txtResult.clear();
+    	int numeroReporter;
+    	int soglia;
+    	try{
+    		numeroReporter = Integer.parseInt(this.txtN.getText());
+    		soglia = Integer.parseInt(this.txtX.getText());
+    	}
+    	catch(NumberFormatException e) {
+    		return;
+    	}
+    	
+    	this.model.simula(numeroReporter);
+    	
+    	for(Match m : this.model.getMatches()) {
+    		Team sCasa = this.model.getTeam(m.getTeamHomeID());
+    		Team sTrasferta = this.model.getTeam(m.getTeamAwayID());
+    		media += sCasa.getReporter()+sTrasferta.getReporter();
+    		
+    	}
+    	
+    	txtResult.appendText("\n"+"Numero di reporter che hanno assistito in media ad ogni partita: "+media/(this.model.getMatches().size()*2));
+    	
+    	int count = 0;
+    	for(Match mm : this.model.getMatches()) {
+    		if(mm.getReporter()<soglia) {
+    			count++;
+    		}
+    	}
+    	
+    	txtResult.appendText("\n"+"Numero di partite per cui il numero totale di reporter era critico: "+count);
+    			
+    	
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete

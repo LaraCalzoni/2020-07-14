@@ -15,6 +15,9 @@ public class Match {
 
 	LocalDateTime date;
 	
+	Integer reporter;
+	
+	
 	public Match(Integer matchID, Integer teamHomeID, Integer teamAwayID, Integer teamHomeFormation,
 			Integer teamAwayFormation, Integer resultOfTeamHome, LocalDateTime date, String teamHomeNAME, String teamAwayNAME) {
 		super();
@@ -27,6 +30,7 @@ public class Match {
 		this.teamHomeNAME = teamHomeNAME;
 		this.teamAwayNAME = teamAwayNAME;
 		this.date = date;
+		reporter = 0;
 	}
 	
 	public Integer getMatchID() {
@@ -124,6 +128,14 @@ public class Match {
 		} else if (!matchID.equals(other.matchID))
 			return false;
 		return true;
+	}
+
+	public Integer getReporter() {
+		return reporter;
+	}
+
+	public void setReporter(Integer reporter) {
+		this.reporter = reporter;
 	}
 	
 }
